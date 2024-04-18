@@ -1,0 +1,70 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  username String [unique, not null]
+  email String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  statuses StatusUpdate [not null]
+  sentRequests Relation [not null]
+  receivedRequests Relation [not null]
+  notifications Notification [not null]
+}
+
+Table Relation {
+  id String [pk]
+  requesterId String [not null]
+  addresseeId String [not null]
+  status FriendRequestStatus [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  requester User [not null]
+  addressee User [not null]
+}
+
+Table StatusUpdate {
+  id String [pk]
+  userId String [not null]
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+}
+
+Table Notification {
+  id String [pk]
+  userId String [not null]
+  type NotificationType [not null]
+  message String [not null]
+  status NotificationStatus [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+}
+
+Enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+Enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+Enum NotificationType {
+  FRIEND_REQUEST
+  STATUS_UPDATE
+}
+
+Ref: Relation.requesterId > User.id
+
+Ref: Relation.addresseeId > User.id
+
+Ref: StatusUpdate.userId > User.id
+
+Ref: Notification.userId > User.id

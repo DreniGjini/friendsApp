@@ -1,0 +1,68 @@
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String        @id @default(uuid())
+  username         String        @unique
+  email            String        @unique
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  statuses         StatusUpdate[]
+  sentRequests     Relation[]  @relation("requesterFriends")
+  receivedRequests Relation[]  @relation("addresseeFriends")
+  notifications    Notification[]
+}
+
+model Relation {
+  id           String      @id @default(uuid())
+  requesterId  String
+  addresseeId  String
+  status       FriendRequestStatus   
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  requester    User @relation("requesterFriends", fields: [requesterId], references: [id])
+  addressee    User @relation("addresseeFriends", fields: [addresseeId], references: [id])
+}
+
+model StatusUpdate {
+  id        String      @id @default(uuid())
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String      @id @default(uuid())
+  userId    String
+  type      NotificationType   
+  message   String
+  status    NotificationStatus   
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+enum NotificationType {
+  FRIEND_REQUEST
+  STATUS_UPDATE
+}
