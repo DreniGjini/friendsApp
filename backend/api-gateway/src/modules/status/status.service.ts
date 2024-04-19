@@ -13,7 +13,9 @@ export class StatusService {
     const status = await this.client
       .send({ cmd: 'create_status' }, { userId, content })
       .toPromise();
-    this.eventsGateway.notifyRoom(userId, 'statusUpdated', status);
+    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
+      message: 'You have a new friend request!',
+    });
     return status;
   }
 
@@ -21,7 +23,9 @@ export class StatusService {
     const updatedStatus = await this.client
       .send({ cmd: 'update_status' }, { statusId, newContent })
       .toPromise();
-    this.eventsGateway.notifyRoom(userId, 'statusUpdated', updatedStatus);
+    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
+      message: 'You have a new friend request!',
+    });
     return updatedStatus;
   }
 }

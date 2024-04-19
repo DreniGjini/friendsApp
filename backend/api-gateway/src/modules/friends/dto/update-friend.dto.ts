@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateRelationDto } from './create-relation.dto';
+import { CreateFriendDto } from './create-friend.dto';
 import { FriendRequestStatus } from 'src/common/enums';
 
-export class UpdateRelationDto extends PartialType(CreateRelationDto) {
+export class UpdateFriendDto extends PartialType(CreateFriendDto) {
   status: FriendRequestStatus;
 }

@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RelationsService } from './relations.service';
+import { FriendsService } from './friends.service';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateRelationDto } from './dto/create-relation.dto';
-import { UpdateRelationDto } from './dto/update-relation.dto';
+import { CreateFriendDto } from './dto/create-friend.dto';
+import { UpdateFriendDto } from './dto/update-friend.dto';
 
-describe('RelationsService', () => {
-  let service: RelationsService;
+describe('FriendsService', () => {
+  let service: FriendsService;
   let clientProxyMock: jest.Mocked<ClientProxy>;
 
   beforeEach(async () => {
@@ -20,28 +20,28 @@ describe('RelationsService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        RelationsService,
+        FriendsService,
         { provide: 'NATS_SERVICE', useValue: clientProxyMock },
       ],
     }).compile();
 
-    service = module.get<RelationsService>(RelationsService);
+    service = module.get<FriendsService>(FriendsService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('createRelation', () => {
-    it('should create a relation and notify the room', async () => {
-      const dto = new CreateRelationDto(); // Populate with appropriate properties
+  describe('createFriend', () => {
+    it('should create a Friend and notify the room', async () => {
+      const dto = new CreateFriendDto(); // Populate with appropriate properties
       const resultValue = 'someValue'; // Expected result from the clientProxy
       clientProxyMock.send.mockResolvedValue(resultValue as never);
 
-      const result = await service.createRelation(dto);
+      const result = await service.createFriend(dto);
 
       expect(clientProxyMock.send).toHaveBeenCalledWith(
-        { cmd: 'create_relation' },
+        { cmd: 'create_friend' },
         dto,
       );
 
@@ -49,33 +49,33 @@ describe('RelationsService', () => {
     });
   });
 
-  describe('getRelationsByUserId', () => {
-    it('should return relations for a user', async () => {
+  describe('getFriendsByUserId', () => {
+    it('should return friends for a user', async () => {
       const userId = 'user123';
-      const expectedResult = ['relation1', 'relation2'];
+      const expectedResult = ['friend1', 'friend2'];
       clientProxyMock.send.mockResolvedValue(expectedResult as never);
 
-      const result = await service.getRelationsByUserId(userId);
+      const result = await service.getFriendsByUserId(userId);
 
       expect(clientProxyMock.send).toHaveBeenCalledWith(
-        { cmd: 'get_relations_by_user' },
+        { cmd: 'get_friends_by_user' },
         userId,
       );
       expect(result).toEqual(expectedResult);
     });
   });
 
-  describe('updateRelationStatus', () => {
-    it('should update relation status and notify the room', async () => {
+  describe('updateFriendStatus', () => {
+    it('should update friend status and notify the room', async () => {
       const id = 'rel123';
-      const dto = new UpdateRelationDto(); // Populate with appropriate properties
+      const dto = new UpdateFriendDto(); // Populate with appropriate properties
       const resultValue = 'updateSuccess';
       clientProxyMock.send.mockResolvedValue(resultValue as never);
 
-      const result = await service.updateRelationStatus(id, dto);
+      const result = await service.updateFriendStatus(id, dto);
 
       expect(clientProxyMock.send).toHaveBeenCalledWith(
-        { cmd: 'update_relation_status' },
+        { cmd: 'update_friend_status' },
         { id, ...dto },
       );
 
@@ -83,16 +83,16 @@ describe('RelationsService', () => {
     });
   });
 
-  describe('deleteRelation', () => {
-    it('should delete a relation and notify the room', async () => {
+  describe('deleteFriend', () => {
+    it('should delete a friend and notify the room', async () => {
       const id = 'rel123';
       const resultValue = 'deleteSuccess';
       clientProxyMock.send.mockResolvedValue(resultValue as never);
 
-      const result = await service.deleteRelation(id);
+      const result = await service.deleteFriend(id);
 
       expect(clientProxyMock.send).toHaveBeenCalledWith(
-        { cmd: 'delete_relation' },
+        { cmd: 'delete_friend' },
         id,
       );
 
