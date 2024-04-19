@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { NotificationsController } from './notifications.controller';
 import { NatsModule } from 'src/nats-client/nats.module';
-import { EventsGateway } from 'src/events/events.gateway';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
-  imports: [NatsModule, EventsGateway],
+  imports: [NatsModule, EventsModule],
   controllers: [NotificationsController],
   providers: [NotificationsService],
 })

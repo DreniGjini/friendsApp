@@ -10,14 +10,13 @@ export class NotificationsService {
   ) {}
 
   async createNotification(notificationDto: any) {
-    const notification = await this.client
-      .send({ cmd: 'create_notification' }, notificationDto)
-      .toPromise();
-    this.eventsGateway.notifyRoom(
-      notification.userId,
-      'notificationCreated',
-      notification,
+    const notification = this.client.send(
+      { cmd: 'create_notification' },
+      notificationDto,
     );
+    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
+      message: 'You have a new friend request!',
+    });
     return notification;
   }
 
