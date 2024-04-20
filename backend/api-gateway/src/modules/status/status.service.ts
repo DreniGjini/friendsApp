@@ -1,7 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { UpdateStatusDto } from './dto/update-status.dto';
-import { tap } from 'rxjs';
+import { tap, catchError, throwError } from 'rxjs';
 import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
@@ -17,6 +17,12 @@ export class StatusService {
       tap((data) => {
         this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
       }),
+      catchError((err) => {
+        console.error('Error creating status:', err);
+        return throwError(
+          () => new BadRequestException('Error creating status'),
+        );
+      }),
     );
   }
 
@@ -26,6 +32,12 @@ export class StatusService {
       .pipe(
         tap((data) => {
           this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
+        }),
+        catchError((err) => {
+          console.error('Error updating status:', err);
+          return throwError(
+            () => new BadRequestException('Error updating status'),
+          );
         }),
       );
   }

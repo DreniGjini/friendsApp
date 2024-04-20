@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { StatusService } from './status.service';
 import { UpdateStatusDto } from './dto/update-status.dto';
 
@@ -8,9 +16,15 @@ export class StatusController {
 
   @Post()
   async createStatus(@Body() body: { userId: string; content: string }) {
-    console.log('api gateway controller status');
     const { userId, content } = body;
-    return await this.statusService.createStatus(userId, content);
+    try {
+      return await this.statusService.createStatus(userId, content);
+    } catch (error) {
+      throw new HttpException(
+        'Failed to create status',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Patch(':statusId')
@@ -18,6 +32,13 @@ export class StatusController {
     @Param('statusId') statusId: string,
     @Body() updateStatusDto: UpdateStatusDto,
   ) {
-    return await this.statusService.updateStatus(statusId, updateStatusDto);
+    try {
+      return await this.statusService.updateStatus(statusId, updateStatusDto);
+    } catch (error) {
+      throw new HttpException(
+        'Failed to update status',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

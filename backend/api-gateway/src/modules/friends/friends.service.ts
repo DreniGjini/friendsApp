@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { EventsGateway } from 'src/events/events.gateway';
@@ -7,6 +12,8 @@ import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable()
 export class FriendsService {
+  private readonly logger = new Logger(FriendsService.name);
+
   constructor(
     @Inject('NATS_SERVICE') private cliProxy: ClientProxy,
     private eventsGateway: EventsGateway,
@@ -20,8 +27,10 @@ export class FriendsService {
           'friends',
           'NEW_FRIEND_REQUEST',
         );
+        this.logger.log(`Friend request created: User ID ${data.userId}`);
       }),
-      catchError(() => {
+      catchError((err) => {
+        this.logger.error('Error in creating friend request', err);
         return throwError(
           () => new BadRequestException('Error in creating friend request'),
         );
@@ -30,7 +39,18 @@ export class FriendsService {
   }
 
   async getFriendsByUserId(userId: string) {
-    return this.cliProxy.send({ cmd: 'get_friends_by_user' }, userId);
+    return this.cliProxy.send({ cmd: 'get_friends_by_user' }, userId).pipe(
+      tap(() => this.logger.log(`Retrieved friends for User ID ${userId}`)),
+      catchError((err) => {
+        this.logger.error(
+          `Error retrieving friends for User ID ${userId}`,
+          err,
+        );
+        return throwError(
+          () => new BadRequestException('Error retrieving friends'),
+        );
+      }),
+    );
   }
 
   async updateFriendStatus(id: string, updateFriendStatusDto: UpdateFriendDto) {
@@ -43,8 +63,10 @@ export class FriendsService {
             'friends',
             'FRIEND_REQUEST_ACCEPTED',
           );
+          this.logger.log(`Friend status updated: User ID ${data.userId}`);
         }),
-        catchError(() => {
+        catchError((err) => {
+          this.logger.error('Error in updating friend status', err);
           return throwError(
             () => new BadRequestException('Error in updating friend status'),
           );
@@ -53,6 +75,14 @@ export class FriendsService {
   }
 
   async deleteFriend(id: string) {
-    return this.cliProxy.send({ cmd: 'delete_friend' }, id);
+    return this.cliProxy.send({ cmd: 'delete_friend' }, id).pipe(
+      tap(() => this.logger.log(`Deleted friend ID ${id}`)),
+      catchError((err) => {
+        this.logger.error(`Error deleting friend ID ${id}`, err);
+        return throwError(
+          () => new BadRequestException('Error deleting friend'),
+        );
+      }),
+    );
   }
 }

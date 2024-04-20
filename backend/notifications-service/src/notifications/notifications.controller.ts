@@ -1,44 +1,91 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { NotificationsService } from './notifications.service';
 import { CreateFriendshipDTO } from './dto/create-friendship.dto';
+import { BadRequestException } from '@nestjs/common';
 
 @Controller()
 export class NotificationsController {
+  private readonly logger = new Logger(NotificationsController.name);
+
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @MessagePattern({ cmd: 'create_notification' })
-  createNotification(@Payload() notificationDto: any) {
-    return this.notificationsService.createNotification(notificationDto);
+  async createNotification(@Payload() notificationDto: any) {
+    try {
+      return await this.notificationsService.createNotification(
+        notificationDto,
+      );
+    } catch (error) {
+      this.logger.error('Error creating notification', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to create notification',
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'get_notifications' })
-  getNotifications(@Payload() userId: string) {
-    return this.notificationsService.getNotifications(userId);
+  async getNotifications(@Payload() userId: string) {
+    try {
+      return await this.notificationsService.getNotifications(userId);
+    } catch (error) {
+      this.logger.error('Error getting notifications', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to retrieve notifications',
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'friend_request_pending_or_changed' })
-  friendRequestNotification(@Payload() friends: CreateFriendshipDTO) {
-    return this.notificationsService.friendRequestNotification(friends);
+  async friendRequestNotification(@Payload() friends: CreateFriendshipDTO) {
+    try {
+      return await this.notificationsService.friendRequestNotification(friends);
+    } catch (error) {
+      this.logger.error('Error handling friend request notification', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to handle friend request notification',
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'status_update' })
-  statusCreatedNotification(@Payload() { userId }: { userId: string }) {
-    return this.notificationsService.notifyAllFriends(userId);
+  async statusCreatedNotification(@Payload() { userId }: { userId: string }) {
+    try {
+      return await this.notificationsService.notifyAllFriends(userId);
+    } catch (error) {
+      this.logger.error('Error notifying all friends', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to notify all friends',
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'update_friendship_notification' })
-  updateFriendshipNotification(@Payload() id: string) {
-    return this.notificationsService.updateFriendshipNotification(id);
+  async updateFriendshipNotification(@Payload() id: string) {
+    try {
+      return await this.notificationsService.updateFriendshipNotification(id);
+    } catch (error) {
+      this.logger.error('Error updating friendship notification', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to update friendship notification',
+      );
+    }
   }
 
   @MessagePattern({ cmd: 'update_status_notifications' })
-  updateUsersStatusNotifications(
+  async updateUsersStatusNotifications(
     @Payload() { ids, userId }: { ids: string[]; userId: string },
   ) {
-    return this.notificationsService.updateUsersStatusNotifications(
-      ids,
-      userId,
-    );
+    try {
+      return await this.notificationsService.updateUsersStatusNotifications(
+        ids,
+        userId,
+      );
+    } catch (error) {
+      this.logger.error('Error updating status notifications', error);
+      throw new BadRequestException(
+        error?.message || 'Failed to update status notifications',
+      );
+    }
   }
 }
