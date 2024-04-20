@@ -11,6 +11,19 @@ generator client {
 model User {
   id            String          @id @default(uuid())
   notifications Notification[]
+    sentRequests   Friend[]  @relation("requesterFriends")
+  receivedRequests Friend[]  @relation("addresseeFriends")
+}
+
+model Friend {
+  id           String      @id @default(uuid())
+  requesterId  String
+  addresseeId  String
+  status       FriendRequestStatus   
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  requester    User @relation("requesterFriends", fields: [requesterId], references: [id])
+  addressee    User @relation("addresseeFriends", fields: [addresseeId], references: [id])
 }
 
 model Notification {
@@ -33,7 +46,7 @@ enum NotificationStatus {
   READ
 }
 
-enum FriendStatus {
+enum FriendRequestStatus {
   PENDING
   ACCEPTED
   REJECTED

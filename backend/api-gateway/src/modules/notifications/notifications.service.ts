@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { EventsGateway } from '../../events/events.gateway';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable()
 export class NotificationsService {
@@ -14,9 +15,7 @@ export class NotificationsService {
       { cmd: 'create_notification' },
       notificationDto,
     );
-    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
-      message: 'You have a new friend request!',
-    });
+
     return notification;
   }
 
@@ -26,5 +25,37 @@ export class NotificationsService {
       userId,
     );
     return notifications;
+  }
+
+  async updateFriendShipStatusNotification(id: string) {
+    return this.client.send({ cmd: 'update_friendship_notification' }, id).pipe(
+      tap((data) => {
+        this.eventsGateway.notifyUser(
+          data,
+          'friends',
+          'NEW_FRIEND_REQUEST_UPDATE',
+        );
+      }),
+      catchError(() => {
+        return throwError(
+          () => new BadRequestException('Error in updating status request'),
+        );
+      }),
+    );
+  }
+
+  async updateUsersStatusNotifications(ids: string[], userId: string) {
+    return this.client
+      .send({ cmd: 'update_status_notifications' }, { ids, userId })
+      .pipe(
+        tap((data) => {
+          this.eventsGateway.notifyUser(data, 'friends', 'STATUS_CHANGE');
+        }),
+        catchError(() => {
+          return throwError(
+            () => new BadRequestException('Error in updating status request'),
+          );
+        }),
+      );
   }
 }

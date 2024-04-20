@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { EventsGateway } from '../../events/events.gateway';
+import { UpdateStatusDto } from './dto/update-status.dto';
+import { tap } from 'rxjs';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class StatusService {
@@ -10,22 +12,21 @@ export class StatusService {
   ) {}
 
   async createStatus(userId: string, content: string) {
-    const status = await this.client
-      .send({ cmd: 'create_status' }, { userId, content })
-      .toPromise();
-    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
-      message: 'You have a new friend request!',
-    });
-    return status;
+    console.log('api gateway service status');
+    return this.client.send({ cmd: 'create_status' }, { userId, content }).pipe(
+      tap((data) => {
+        this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
+      }),
+    );
   }
 
-  async updateStatus(userId: string, statusId: string, newContent: string) {
-    const updatedStatus = await this.client
-      .send({ cmd: 'update_status' }, { statusId, newContent })
-      .toPromise();
-    this.eventsGateway.notifyUser('userId123', 'newFriendRequest', {
-      message: 'You have a new friend request!',
-    });
-    return updatedStatus;
+  async updateStatus(statusId: string, { content, userId }: UpdateStatusDto) {
+    return this.client
+      .send({ cmd: 'update_status' }, { statusId, content, userId })
+      .pipe(
+        tap((data) => {
+          this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
+        }),
+      );
   }
 }

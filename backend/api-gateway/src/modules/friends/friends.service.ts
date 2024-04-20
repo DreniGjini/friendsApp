@@ -4,7 +4,6 @@ import { ClientProxy } from '@nestjs/microservices';
 import { EventsGateway } from 'src/events/events.gateway';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { catchError, tap, throwError } from 'rxjs';
-import { FriendRequestStatus } from 'src/common/enums';
 
 @Injectable()
 export class FriendsService {
@@ -14,7 +13,14 @@ export class FriendsService {
   ) {}
 
   async createFriend(createFriendDto: CreateFriendDto) {
-    this.cliProxy.send({ cmd: 'create_friend' }, createFriendDto).pipe(
+    return this.cliProxy.send({ cmd: 'create_friend' }, createFriendDto).pipe(
+      tap((data) => {
+        this.eventsGateway.notifyUser(
+          data.userId,
+          'friends',
+          'NEW_FRIEND_REQUEST',
+        );
+      }),
       catchError(() => {
         return throwError(
           () => new BadRequestException('Error in creating friend request'),
@@ -32,15 +38,11 @@ export class FriendsService {
       .send({ cmd: 'update_friend_status' }, { id, ...updateFriendStatusDto })
       .pipe(
         tap((data) => {
-          if (data.status === FriendRequestStatus.ACCEPTED) {
-            this.eventsGateway.notifyUser(
-              updateFriendStatusDto.userId,
-              'friends',
-              {
-                message: 'ACCEPTED',
-              },
-            );
-          }
+          this.eventsGateway.notifyUser(
+            data.userId,
+            'friends',
+            'FRIEND_REQUEST_ACCEPTED',
+          );
         }),
         catchError(() => {
           return throwError(

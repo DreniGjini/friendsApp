@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateFriendDto {
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  requesterId: string;
 
   @IsString()
   @IsNotEmpty()
-  relatedUserId: string;
+  addresseeId: string;
 }

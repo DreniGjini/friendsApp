@@ -1,5 +1,6 @@
 import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
 import { StatusService } from './status.service';
+import { UpdateStatusDto } from './dto/update-status.dto';
 
 @Controller('status')
 export class StatusController {
@@ -7,6 +8,7 @@ export class StatusController {
 
   @Post()
   async createStatus(@Body() body: { userId: string; content: string }) {
+    console.log('api gateway controller status');
     const { userId, content } = body;
     return await this.statusService.createStatus(userId, content);
   }
@@ -14,9 +16,8 @@ export class StatusController {
   @Patch(':statusId')
   async updateStatus(
     @Param('statusId') statusId: string,
-    @Body() body: { userId: string; newContent: string },
+    @Body() updateStatusDto: UpdateStatusDto,
   ) {
-    const { userId, newContent } = body;
-    return await this.statusService.updateStatus(userId, statusId, newContent);
+    return await this.statusService.updateStatus(statusId, updateStatusDto);
   }
 }

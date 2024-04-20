@@ -23,7 +23,7 @@ export class UsersService {
           const payload = { username: data.username, userId: data.id };
           return {
             userData: data,
-            token: jwt.sign(payload, this.JWT_SECRET, { expiresIn: '1h' }),
+            token: jwt.sign(payload, this.JWT_SECRET, { expiresIn: '10h' }),
           };
         }),
       );

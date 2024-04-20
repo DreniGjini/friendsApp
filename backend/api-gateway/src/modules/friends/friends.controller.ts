@@ -45,6 +45,7 @@ export class FriendsController {
     @Param('id') id: string,
     @Body() updateFriendStatusDto: UpdateFriendDto,
   ) {
+    console.log('into it');
     try {
       const updatedFriend = await this.friendsService.updateFriendStatus(
         id,

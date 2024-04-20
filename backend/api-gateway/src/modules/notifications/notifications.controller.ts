@@ -6,6 +6,7 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 
@@ -39,5 +40,18 @@ export class NotificationsController {
         HttpStatus.NOT_FOUND,
       );
     }
+  }
+
+  @Patch(':id')
+  async updateFriendshipNotification(@Param('id') id: string) {
+    this.notificationsService.updateFriendShipStatusNotification(id);
+  }
+
+  @Patch(':userId')
+  async updateUsersStatusNotifications(
+    @Param('userId') userId: string,
+    @Body() ids: string[],
+  ) {
+    this.notificationsService.updateUsersStatusNotifications(ids, userId);
   }
 }
