@@ -1,36 +1,49 @@
-import React, { useState, ReactNode } from "react";
+import React, { InputHTMLAttributes } from "react";
+import Styles from "./input.module.css";
 
-interface DropdownProps {
-  children: ReactNode;
-  iniciator: ReactNode;
+interface Input extends InputHTMLAttributes<HTMLInputElement> {
+  errors?: Record<string, any>;
+  image?: boolean;
+  register?: any;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ children, iniciator }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const isOpenClass = isOpen
-    ? "translate-y-0 opacity-100 pointer-events-all"
-    : "-translate-y-1 opacity-0 pointer-events-none";
-
-  return (
-    <div className="relative">
-      <div
-        className="inline-block hover:opacity-75 transition-opacity cursor-pointer"
-        onClick={handleToggle}
-      >
-        {iniciator}
+const Input: React.FC<Input> = ({ errors, image, register, ...props }) => {
+  if (!image) {
+    return (
+      <div className="mb-4 w-full">
+        <input
+          {...register}
+          className={`${Styles.input} rounded-full bg-gray-400 px-4 h-10 text-white w-full`}
+          {...props}
+        />
+        <p className="text-[#ff5a5a] text-sm mt-1 ml-3">
+          {errors && <span>{errors.message}</span>}
+        </p>
       </div>
-      <div
-        className={`absolute right-0 top-0 w-48 transition-all duration-300 bg-white rounded-md p-4 text-black mt-10 z-50 ${isOpenClass}`}
-      >
-        {children}
+    );
+  } else {
+    return (
+      <div>
+        <label className="rounded-full bg-gray-400 px-4 h-10 text-white inline-flex items-center justify-center cursor-pointer">
+          Upload Image
+          <input
+            {...register}
+            className="hidden"
+            type="file"
+            accept="image/*"
+            {...props}
+          />
+        </label>
+        {errors && (
+          <div>
+            {Object.keys(errors).map((key) => (
+              <span key={key}>{errors[key].message}</span>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  }
 };
 
-export default Dropdown;
+export default Input;
