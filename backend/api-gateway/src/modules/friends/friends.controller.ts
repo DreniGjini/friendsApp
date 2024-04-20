@@ -8,6 +8,8 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { FriendsService } from './friends.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
@@ -23,10 +25,7 @@ export class FriendsController {
       const friend = await this.friendsService.createFriend(createFriendDto);
       return friend;
     } catch (error) {
-      throw new HttpException(
-        'Failed to create friend',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Failed to create friend');
     }
   }
 
@@ -36,7 +35,7 @@ export class FriendsController {
       const friends = await this.friendsService.getFriendsByUserId(userId);
       return friends;
     } catch (error) {
-      throw new HttpException('Failed to get friends', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Failed to get friends');
     }
   }
 

@@ -9,14 +9,11 @@ describe('FriendsService', () => {
   let clientProxyMock: jest.Mocked<ClientProxy>;
 
   beforeEach(async () => {
-    // Create a mock for ClientProxy
     clientProxyMock = {
       send: jest.fn(),
       connect: jest.fn(),
       close: jest.fn(),
     } as any;
-
-    // Create a mock for EventsGateway
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [

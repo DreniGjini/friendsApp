@@ -11,20 +11,25 @@ export class NotificationsService {
   ) {}
 
   async createNotification(notificationDto: any) {
-    const notification = this.client.send(
-      { cmd: 'create_notification' },
-      notificationDto,
-    );
-
-    return notification;
+    return this.client
+      .send({ cmd: 'create_notification' }, notificationDto)
+      .pipe(
+        catchError(() => {
+          return throwError(
+            () => new BadRequestException('Error creating notification'),
+          );
+        }),
+      );
   }
 
   async getNotifications(userId: string) {
-    const notifications = this.client.send(
-      { cmd: 'get_notifications' },
-      userId,
+    return this.client.send({ cmd: 'get_notifications' }, userId).pipe(
+      catchError(() => {
+        return throwError(
+          () => new BadRequestException('Error fetching notifications'),
+        );
+      }),
     );
-    return notifications;
   }
 
   async updateFriendShipStatusNotification(id: string) {
@@ -38,7 +43,7 @@ export class NotificationsService {
       }),
       catchError(() => {
         return throwError(
-          () => new BadRequestException('Error in updating status request'),
+          () => new BadRequestException('Error in updating friendship status'),
         );
       }),
     );
@@ -53,7 +58,7 @@ export class NotificationsService {
         }),
         catchError(() => {
           return throwError(
-            () => new BadRequestException('Error in updating status request'),
+            () => new BadRequestException('Error in updating user statuses'),
           );
         }),
       );

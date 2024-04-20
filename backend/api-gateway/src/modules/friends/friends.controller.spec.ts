@@ -1,29 +1,27 @@
-// src/friends/friends.controller.spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { FriendsController } from './friends.controller';
 import { FriendsService } from './friends.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
-import { FriendRequestStatus } from 'src/common/enums';
+import { of } from 'rxjs';
 
 describe('FriendsController', () => {
   let controller: FriendsController;
   let service: FriendsService;
 
   beforeEach(async () => {
-    const mockFriendsService = {
-      createFriend: jest.fn(),
-      getFriendsByUserId: jest.fn(),
-      updateFriendStatus: jest.fn(),
-      deleteFriend: jest.fn(),
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FriendsController],
       providers: [
         {
           provide: FriendsService,
-          useValue: mockFriendsService,
+          useValue: {
+            createFriend: jest.fn(),
+            getFriendsByUserId: jest.fn(),
+            updateFriendStatus: jest.fn(),
+            deleteFriend: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -37,53 +35,73 @@ describe('FriendsController', () => {
   });
 
   describe('createFriend', () => {
-    it('should call FriendsService.createFriend', async () => {
+    it('should successfully create a friend', async () => {
       const dto = new CreateFriendDto();
-      dto.userId = '1';
-      dto.relatedUserId = '2';
-      (service.createFriend as jest.Mock).mockResolvedValue(dto);
-      await controller.createFriend(dto);
-      expect(service.createFriend).toHaveBeenCalledWith(dto);
+      jest.spyOn(service, 'createFriend').mockResolvedValue(of('a friend'));
+      expect(await controller.createFriend(dto)).toBe('a friend');
+    });
+
+    it('should throw an exception when service fails', async () => {
+      const dto = new CreateFriendDto();
+      jest.spyOn(service, 'createFriend').mockRejectedValue(new Error());
+      await expect(controller.createFriend(dto)).rejects.toThrow(
+        new HttpException('Failed to create friend', HttpStatus.BAD_REQUEST),
+      );
     });
   });
 
   describe('getFriendsByUser', () => {
-    it('should call FriendsService.getFriendsByUserId', async () => {
-      const userId = '1';
-      const expectedResponse = [];
-      (service.getFriendsByUserId as jest.Mock).mockResolvedValue(
-        expectedResponse,
+    it('should return an array of friends', async () => {
+      jest
+        .spyOn(service, 'getFriendsByUserId')
+        .mockResolvedValue(of(['friend']));
+      expect(await controller.getFriendsByUser('user-id')).toEqual(['friend']);
+    });
+
+    it('should throw an exception when service fails', async () => {
+      jest.spyOn(service, 'getFriendsByUserId').mockRejectedValue(new Error());
+      await expect(controller.getFriendsByUser('user-id')).rejects.toThrow(
+        new HttpException('Failed to get friends', HttpStatus.NOT_FOUND),
       );
-      const result = await controller.getFriendsByUser(userId);
-      expect(service.getFriendsByUserId).toHaveBeenCalledWith(userId);
-      expect(result).toEqual(expectedResponse);
     });
   });
 
   describe('updateFriendStatus', () => {
-    it('should call FriendsService.updateFriendStatus', async () => {
-      const id = '1';
+    it('should return updated friend', async () => {
       const dto = new UpdateFriendDto();
-      dto.status = FriendRequestStatus.ACCEPTED;
-      (service.updateFriendStatus as jest.Mock).mockResolvedValue({
-        ...dto,
-        id,
-      });
-      const result = await controller.updateFriendStatus(id, dto);
-      expect(service.updateFriendStatus).toHaveBeenCalledWith(id, dto);
-      expect(result).toEqual({ ...dto, id });
+      jest
+        .spyOn(service, 'updateFriendStatus')
+        .mockResolvedValue(of('updated friend'));
+      expect(await controller.updateFriendStatus('id', dto)).toBe(
+        'updated friend',
+      );
+    });
+
+    it('should throw an exception when service fails', async () => {
+      const dto = new UpdateFriendDto();
+      jest.spyOn(service, 'updateFriendStatus').mockRejectedValue(new Error());
+      await expect(controller.updateFriendStatus('id', dto)).rejects.toThrow(
+        new HttpException(
+          'Failed to update friend status',
+          HttpStatus.BAD_REQUEST,
+        ),
+      );
     });
   });
 
   describe('deleteFriend', () => {
-    it('should call FriendsService.deleteFriend', async () => {
-      const id = '1';
-      (service.deleteFriend as jest.Mock).mockResolvedValue({
+    it('should return success message on deletion', async () => {
+      jest.spyOn(service, 'deleteFriend').mockResolvedValue(undefined);
+      expect(await controller.deleteFriend('id')).toEqual({
         message: 'Friend deleted successfully',
       });
-      const result = await controller.deleteFriend(id);
-      expect(service.deleteFriend).toHaveBeenCalledWith(id);
-      expect(result).toEqual({ message: 'Friend deleted successfully' });
+    });
+
+    it('should throw an exception when service fails', async () => {
+      jest.spyOn(service, 'deleteFriend').mockRejectedValue(new Error());
+      await expect(controller.deleteFriend('id')).rejects.toThrow(
+        new HttpException('Failed to delete friend', HttpStatus.BAD_REQUEST),
+      );
     });
   });
 });

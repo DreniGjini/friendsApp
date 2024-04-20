@@ -1,18 +1,32 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ClientProxy } from '@nestjs/microservices';
-import { map } from 'rxjs';
+import { map, catchError, throwError } from 'rxjs';
 import * as jwt from 'jsonwebtoken';
+
 @Injectable()
 export class UsersService {
   constructor(@Inject('NATS_SERVICE') private cliProxy: ClientProxy) {}
   private readonly JWT_SECRET = 'verysecret';
 
   async createUser(createUserDto: CreateUserDto): Promise<any> {
-    return this.cliProxy.send({ cmd: 'create_user' }, createUserDto);
+    return this.cliProxy.send({ cmd: 'create_user' }, createUserDto).pipe(
+      catchError((err) => {
+        console.error('Error creating user:', err);
+        return throwError(
+          () => new BadRequestException('Failed to create user'),
+        );
+      }),
+    );
   }
+
   async getUserById(id: string): Promise<any> {
-    return this.cliProxy.send({ cmd: 'get_user_by_id' }, id);
+    return this.cliProxy.send({ cmd: 'get_user_by_id' }, id).pipe(
+      catchError((err) => {
+        console.error('Error retrieving user:', err);
+        return throwError(() => new BadRequestException('User not found'));
+      }),
+    );
   }
 
   async login(id: string): Promise<any> {
@@ -25,6 +39,10 @@ export class UsersService {
             userData: data,
             token: jwt.sign(payload, this.JWT_SECRET, { expiresIn: '10h' }),
           };
+        }),
+        catchError((err) => {
+          console.error('Error during login:', err);
+          return throwError(() => new BadRequestException('Login failed'));
         }),
       );
   }
