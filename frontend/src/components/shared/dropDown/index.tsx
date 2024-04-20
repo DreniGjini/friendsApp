@@ -1,5 +1,4 @@
 import React, { useState, ReactNode } from "react";
-import Styles from "./dropdown.module.scss";
 
 interface DropdownProps {
   children: ReactNode;
@@ -13,14 +12,23 @@ const Dropdown: React.FC<DropdownProps> = ({ children, iniciator }) => {
     setIsOpen(!isOpen);
   };
 
-  const isOpenClass = isOpen ? Styles.open : "";
+  const isOpenClass = isOpen
+    ? "translate-y-0 opacity-100 pointer-events-all"
+    : "-translate-y-1 opacity-0 pointer-events-none";
 
   return (
-    <div className={`${Styles.dropdown} ${isOpenClass}`}>
-      <div className={Styles.toggleButton} onClick={handleToggle}>
+    <div className="relative">
+      <div
+        className="inline-block hover:opacity-75 transition-opacity cursor-pointer"
+        onClick={handleToggle}
+      >
         {iniciator}
       </div>
-      <div className={Styles.dropdownContent}>{children}</div>
+      <div
+        className={`absolute right-0 top-0 w-48 transition-all duration-300 bg-white rounded-md p-4 text-black mt-10 z-50 ${isOpenClass}`}
+      >
+        {children}
+      </div>
     </div>
   );
 };
