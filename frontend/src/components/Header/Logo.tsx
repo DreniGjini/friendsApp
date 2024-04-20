@@ -1,11 +1,15 @@
-import LockIcon from "@heroicons/react/24/outline/LockClosedIcon";
+import Logo from "./Logo";
+import Sign from "./user/User";
 
-const Logo = () => {
+const Header = () => {
   return (
-    <div className="w-14 h-14 rounded-full bg-gray-400 flex items-center justify-center">
-      <LockIcon className="w-8 h-8 bg-gray-100 text-white opacity-50" />
-    </div>
+    <header className="bg-gray-500 w-full py-2">
+      <div className="container mx-auto flex items-center justify-between">
+        <Logo />
+        <Sign />
+      </div>
+    </header>
   );
 };
 
-export default Logo;
+export default Header;
