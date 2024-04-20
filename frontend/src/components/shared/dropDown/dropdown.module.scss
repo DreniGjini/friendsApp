@@ -1,0 +1,37 @@
+.dropdown {
+  .toggleButton {
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+    border-radius: 6px;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+  .dropdownContent {
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    width: 200px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+    pointer-events: none;
+    background: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    color: #000;
+    margin-top: 10px;
+    z-index: 50;
+    button {
+      color: #000;
+    }
+  }
+
+  &.open {
+    .dropdownContent {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}
