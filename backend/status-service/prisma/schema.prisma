@@ -14,10 +14,10 @@ model User {
   email     String         @unique
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  statuses  StatusUpdate[] 
+  statuses  Status[] 
 }
 
-model StatusUpdate {
+model Status {
   id        String    @id @default(uuid())
   userId    String    
   content   String    

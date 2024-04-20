@@ -13,13 +13,13 @@ model User {
   email            String        @unique
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-  statuses         StatusUpdate[]
-  sentRequests     Relation[]  @relation("requesterFriends")
-  receivedRequests Relation[]  @relation("addresseeFriends")
+  statuses         Status[]
+  sentRequests     Friend[]  @relation("requesterFriends")
+  receivedRequests Friend[]  @relation("addresseeFriends")
   notifications    Notification[]
 }
 
-model Relation {
+model Friend {
   id           String      @id @default(uuid())
   requesterId  String
   addresseeId  String
@@ -30,7 +30,7 @@ model Relation {
   addressee    User @relation("addresseeFriends", fields: [addresseeId], references: [id])
 }
 
-model StatusUpdate {
+model Status {
   id        String      @id @default(uuid())
   userId    String
   content   String

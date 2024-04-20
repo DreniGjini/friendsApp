@@ -17,10 +17,28 @@ export class NotificationsController {
     return this.notificationsService.getNotifications(userId);
   }
 
-  @MessagePattern({ cmd: 'friend_request_pending' })
+  @MessagePattern({ cmd: 'friend_request_pending_or_changed' })
   friendRequestNotification(@Payload() friends: CreateFriendshipDTO) {
-    console.log('message revieved in controller');
-
     return this.notificationsService.friendRequestNotification(friends);
+  }
+
+  @MessagePattern({ cmd: 'status_update' })
+  statusCreatedNotification(@Payload() { userId }: { userId: string }) {
+    return this.notificationsService.notifyAllFriends(userId);
+  }
+
+  @MessagePattern({ cmd: 'update_friendship_notification' })
+  updateFriendshipNotification(@Payload() id: string) {
+    return this.notificationsService.updateFriendshipNotification(id);
+  }
+
+  @MessagePattern({ cmd: 'update_status_notifications' })
+  updateUsersStatusNotifications(
+    @Payload() { ids, userId }: { ids: string[]; userId: string },
+  ) {
+    return this.notificationsService.updateUsersStatusNotifications(
+      ids,
+      userId,
+    );
   }
 }

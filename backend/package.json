@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "project-init": "docker-compose up --build -d && docker exec data-service npx prisma migrate dev --name init && docker exec backend-users_service-1 npx prisma generate && docker exec backend-notifications_service-1 npx prisma generate && docker exec backend-friends_service-1 npx prisma generate && docker exec backend-status_service-1 npx prisma generate"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -13,22 +13,22 @@ model User {
   email           String      @unique
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  requesterRelations Relation[] @relation("Requester")
-  addresseeRelations Relation[] @relation("Addressee")
+  requesterFriends Friend[] @relation("Requester")
+  addresseeFriends Friend[] @relation("Addressee")
 }
 
-model Relation {
+model Friend {
   id          String          @id @default(uuid())
   requesterId String
   addresseeId String
-  status      RelationStatus
+  status      FriendRequestStatus
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   requester   User            @relation(name: "Requester", fields: [requesterId], references: [id])
   addressee   User            @relation(name: "Addressee", fields: [addresseeId], references: [id])
 }
 
-enum RelationStatus {
+enum FriendRequestStatus {
   PENDING
   ACCEPTED
   REJECTED

@@ -7,7 +7,6 @@ import { StatusModule } from './modules/status/status.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { EventsGateway } from './events/events.gateway';
 import { EventsModule } from './events/events.module';
-import { MessagingModule } from './modules/messaging/messaging.module';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { MessagingModule } from './modules/messaging/messaging.module';
     StatusModule,
     NotificationsModule,
     EventsModule,
-    MessagingModule,
   ],
   controllers: [],
   providers: [EventsGateway],
