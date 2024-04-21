@@ -10,6 +10,8 @@ generator client {
 
 model User {
   id            String          @id @default(uuid())
+   name             String
+  imgUrl           String?
   notifications Notification[]
     sentRequests   Friend[]  @relation("requesterFriends")
   receivedRequests Friend[]  @relation("addresseeFriends")
