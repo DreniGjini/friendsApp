@@ -5,12 +5,9 @@ import { HttpMethod } from '../../interfaces/enums/http';
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<IFetchedUser>({} as IFetchedUser);
+  const [data, setData] = useState<IFetchedUser>({} as IFetchedUser);
 
-  const fetchAPI = useBaseFetch<IFetchedUser, IUserQuery>(
-    setLoading,
-    setUserData,
-  );
+  const fetchAPI = useBaseFetch<IFetchedUser, IUserQuery>(setLoading, setData);
 
   const fetchUserByEmail = useCallback(
     (userQueryParams: IUserQuery) => {
@@ -23,7 +20,7 @@ const useLogin = () => {
     [fetchAPI],
   );
 
-  return { loading, userData, fetchUserByEmail };
+  return { loading, data, fetchUserByEmail };
 };
 
 export default useLogin;

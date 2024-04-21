@@ -8,6 +8,6 @@ export interface IFriend {
   status: FriendRequestStatus;
   createdAt: Date;
   updatedAt: Date;
-  requeter: IUser;
-  addressee: IUser;  
+  requester: IUser;
+  addressee: IUser;
 }

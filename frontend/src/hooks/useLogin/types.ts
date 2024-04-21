@@ -4,4 +4,7 @@ export type IUserQuery = {
   emailOrUsername: string;
 };
 
-export interface IFetchedUser extends IUser {}
+export interface IFetchedUser {
+  userData: IUser;
+  token: string;
+}

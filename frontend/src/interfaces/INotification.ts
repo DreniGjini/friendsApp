@@ -8,5 +8,6 @@ export interface INotification {
   message: string;
   status: NotificationStatus;
   createdAd: Date;
-  usuer: IUser;
+  user: IUser;
+  friendshipId: string;
 }

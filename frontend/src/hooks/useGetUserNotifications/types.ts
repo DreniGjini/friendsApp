@@ -1,7 +1,7 @@
 import { INotification } from '../../interfaces/INotification';
 
-export interface IUseGetNotificationsParams  {
+export interface IUseGetNotificationsParams {
   id: string;
-};
+}
 
-export interface IFetchedNotification extends INotification {}
+export type IFetchedNotification = INotification[];

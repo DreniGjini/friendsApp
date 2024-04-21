@@ -5,7 +5,9 @@ import { HttpMethod } from '../../interfaces/enums/http';
 
 const useSendFriendRequest = () => {
   const [loading, setLoading] = useState(false);
-  const [returnData, setReturnData] = useState<IFetchedFriendRequest>({} as IFetchedFriendRequest);
+  const [returnData, setReturnData] = useState<IFetchedFriendRequest>(
+    {} as IFetchedFriendRequest,
+  );
 
   const fetchAPI = useBaseFetch<ISendRequestSchema, IFetchedFriendRequest>(
     setLoading,

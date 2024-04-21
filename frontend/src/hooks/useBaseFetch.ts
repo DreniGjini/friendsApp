@@ -56,7 +56,7 @@ const useBaseFetch = <TBody = undefined, TQueryParams = undefined>(
       } finally {
         setLoading(false);
       }
-    },   
+    },
     [setLoading, setUserData, baseUrl],
   );
 

@@ -5,7 +5,9 @@ import { HttpMethod } from '../../interfaces/enums/http';
 
 const useCreateStatus = () => {
   const [loading, setLoading] = useState(false);
-  const [statusData, setStatusData] = useState<ICraetedStatus>({} as ICraetedStatus);
+  const [statusData, setStatusData] = useState<ICraetedStatus>(
+    {} as ICraetedStatus,
+  );
 
   const fetchAPI = useBaseFetch<CreateStatusSchema, ICraetedStatus>(
     setLoading,

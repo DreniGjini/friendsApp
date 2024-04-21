@@ -1,19 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IStatus } from '../../interfaces/IStatus';
+import { IUser } from '../../interfaces/IUser';
 
-type initialStateType = {
-  value: {
-    username: string;
-    isAuth: boolean;
-    token: string;
-  };
-};
+interface initialStateType
+  extends Pick<
+    IUser,
+    'id' | 'email' | 'name' | 'imgUrl' | 'username' | 'statuses'
+  > {
+  isAuth: boolean;
+  token: string;
+}
 
 const initialState = {
-  value: {
-    isAuth: false,
-    username: '',
-    token: '',
-  },
+  isAuth: false,
 } as initialStateType;
 
 export const auth = createSlice({
@@ -21,14 +20,19 @@ export const auth = createSlice({
   initialState,
   reducers: {
     logOut: () => initialState,
-    logIn: (_, action: PayloadAction<{ username: string; token: string }>) => {
-      const { username, token } = action.payload;
+    logIn: (_, action: PayloadAction<Omit<initialStateType, 'isAuth'>>) => {
+      const { username, token, id, imgUrl, email, name, statuses } =
+        action.payload;
+
       return {
-        value: {
-          isAuth: true,
-          username,
-          token,
-        },
+        isAuth: true,
+        username,
+        token,
+        statuses,
+        imgUrl,
+        name,
+        id,
+        email,
       };
     },
   },

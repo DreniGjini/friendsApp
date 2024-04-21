@@ -1,10 +1,9 @@
-import { FriendRequestStatus } from "../../common/enums";
+import { FriendRequestStatus } from '../../common/enums';
 
 export interface IUpdateFriendshipSchema {
- status: FriendRequestStatus
+  status: FriendRequestStatus;
 }
 
-export interface IUpdatedFriendshipRequest  {
-  userId: string,
+export interface IUpdatedFriendshipRequest {
+  userId: string;
 }
-

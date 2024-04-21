@@ -3,7 +3,7 @@ export interface ISendRequestSchema {
   addresseeId: string;
 }
 
-export interface IFetchedFriendRequest  {
-  userId: string,
-  friendsId: string
+export interface IFetchedFriendRequest {
+  userId: string;
+  friendsId: string;
 }

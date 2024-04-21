@@ -1,29 +1,33 @@
 import { useState, useCallback } from 'react';
-import {  IMarkAsReadNotificationParams, IUpdatedNotificationRequest } from './types';
+import {
+  IMarkAsReadNotificationParams,
+  IUpdatedNotificationRequest,
+} from './types';
 import useBaseFetch from '../useBaseFetch';
 import { HttpMethod } from '../../interfaces/enums/http';
 
 const useMarkNotificationAsRead = () => {
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<IUpdatedNotificationRequest>({} as IUpdatedNotificationRequest);
+  const [notificationData, setNotificationData] =
+    useState<IUpdatedNotificationRequest>({} as IUpdatedNotificationRequest);
 
-  const fetchAPI = useBaseFetch<IMarkAsReadNotificationParams, IUpdatedNotificationRequest>(
-    setLoading,
-    setUserData,
-  );
+  const fetchAPI = useBaseFetch<
+    IMarkAsReadNotificationParams,
+    IUpdatedNotificationRequest
+  >(setLoading, setNotificationData);
 
   const markNotificationAsRead = useCallback(
-    ({id}: IMarkAsReadNotificationParams) => {
+    ({ id }: IMarkAsReadNotificationParams) => {
       fetchAPI({
         url: `notifications/mark-as-read`,
         method: HttpMethod.PATCH,
-        pathParams: [id]
+        pathParams: [id],
       });
     },
     [fetchAPI],
   );
 
-  return { loading, userData, markNotificationAsRead };
+  return { loading, notificationData, markNotificationAsRead };
 };
 
 export default useMarkNotificationAsRead;

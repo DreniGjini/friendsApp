@@ -1,8 +1,7 @@
 export interface IMarkAsReadNotificationParams {
- id: string
+  id: string;
 }
 
-export interface IUpdatedNotificationRequest  {
-  userId: string,
+export interface IUpdatedNotificationRequest {
+  userId: string;
 }
-

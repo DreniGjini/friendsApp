@@ -5,7 +5,9 @@ import { HttpMethod } from '../../interfaces/enums/http';
 
 const useUpdateStatus = () => {
   const [loading, setLoading] = useState(false);
-  const [statusData, setStatusData] = useState<IUpdatedStatus>({} as IUpdatedStatus);
+  const [statusData, setStatusData] = useState<IUpdatedStatus>(
+    {} as IUpdatedStatus,
+  );
 
   const fetchAPI = useBaseFetch<UpdateStatusSchema, IUpdatedStatus>(
     setLoading,
@@ -18,7 +20,7 @@ const useUpdateStatus = () => {
         url: `status`,
         method: HttpMethod.PATCH,
         body: createStatusSchema,
-        pathParams: [id]
+        pathParams: [id],
       });
     },
     [fetchAPI],

@@ -1,5 +1,5 @@
-import { NavLink, Outlet } from "react-router-dom";
-import Header from "../header/Header";
+import { NavLink, Outlet } from 'react-router-dom';
+import Header from '../header/Header';
 
 const Account = () => {
   return (
@@ -25,7 +25,7 @@ const CustomLink = ({ to, name }: { to: string; name: string }) => {
     <NavLink
       className={({ isActive }) =>
         `w-full h-12 items-center justify-center flex transition-colors rounded-2xl font-semibold duration-300 hover:text-white ${
-          isActive ? "bg-gray-400" : "text-gray-400"
+          isActive ? 'bg-gray-400' : 'text-gray-400'
         }`
       }
       to={to}

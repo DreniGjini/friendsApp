@@ -8,9 +8,9 @@ export interface IUser {
   imgUrl?: string;
   username: string;
   email: string;
+  statuses: IStatus[];
   createdAt: Date;
   updatedAt: Date;
-  status?: IStatus;
   sentRequests?: IFriend;
   recievedRequests?: IFriend;
   notifications?: INotification;
