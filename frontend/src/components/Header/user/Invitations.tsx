@@ -1,5 +1,5 @@
-import { UserGroupIcon } from "@heroicons/react/24/outline";
-import Dropdown from "../../shared/dropDown";
+import { UserGroupIcon } from '@heroicons/react/24/outline';
+import Dropdown from '../../shared/dropDown';
 
 const Invitations = () => {
   const ifNotifications = true;

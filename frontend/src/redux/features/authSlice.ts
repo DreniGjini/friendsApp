@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type initialStateType = {
   value: {
@@ -11,23 +11,23 @@ type initialStateType = {
 const initialState = {
   value: {
     isAuth: false,
-    username: "",
-    token: ""
+    username: '',
+    token: '',
   },
 } as initialStateType;
 
 export const auth = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     logOut: () => initialState,
-    logIn: (_, action: PayloadAction<{username: string; token: string;}>) => {
-      const {username, token} = action.payload;
+    logIn: (_, action: PayloadAction<{ username: string; token: string }>) => {
+      const { username, token } = action.payload;
       return {
         value: {
           isAuth: true,
           username,
-          token
+          token,
         },
       };
     },

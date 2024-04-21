@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode } from 'react';
 
 interface DropdownProps {
   children: ReactNode;
@@ -13,8 +13,8 @@ const Dropdown: React.FC<DropdownProps> = ({ children, iniciator }) => {
   };
 
   const isOpenClass = isOpen
-    ? "translate-y-0 opacity-100 pointer-events-all"
-    : "-translate-y-1 opacity-0 pointer-events-none";
+    ? 'translate-y-0 opacity-100 pointer-events-all'
+    : '-translate-y-1 opacity-0 pointer-events-none';
 
   return (
     <div className="relative">

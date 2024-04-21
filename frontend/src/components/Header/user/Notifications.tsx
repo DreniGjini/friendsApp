@@ -1,5 +1,5 @@
-import BellIcon from "@heroicons/react/24/outline/BellIcon";
-import Dropdown from "../../shared/dropDown";
+import BellIcon from '@heroicons/react/24/outline/BellIcon';
+import Dropdown from '../../shared/dropDown';
 
 const Notifications = () => {
   const ifNotifications = true;

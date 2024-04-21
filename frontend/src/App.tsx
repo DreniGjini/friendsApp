@@ -1,27 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Router from './routes';
 import StoreProvider from './redux/provider';
 
+import useGetUserNotifications from './hooks/useGetUserNotifications/useGetUserNotifications';
+import useMarkNotificationAsRead from './hooks/useMarkAsReadNotification/useUpdateFriendshipStatus';
+
 function App() {
+  const { markNotificationAsRead, loading } = useMarkNotificationAsRead();
+
+  const register = () => {
+    markNotificationAsRead({id: "c7fe58cc-ef1e-4ab5-b0c8-c21b172ee2ca"});
+  };
+  if (loading) {
+    console.log(!loading, 'userdata');
+  }
+
   return (
-    <StoreProvider >
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      </StoreProvider>
+    <StoreProvider>
+      <button onClick={register}>REGISTER</button>
+      <Router />
+    </StoreProvider>
   );
 }
 
 export default App;
+// 

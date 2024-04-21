@@ -1,6 +1,6 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "../shared/input";
-import Button from "../shared/button";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import Input from '../shared/input';
+import Button from '../shared/button';
 
 type FormInputs = {
   fullName: string;
@@ -18,7 +18,7 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
     console.log(data);
-    localStorage.setItem("token", "exampleToken");
+    localStorage.setItem('token', 'exampleToken');
   };
   return (
     <div>
@@ -26,24 +26,24 @@ const Signup = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           placeholder="Enter your full name"
-          register={register("fullName", { required: "Full Name is required" })}
+          register={register('fullName', { required: 'Full Name is required' })}
           errors={errors.fullName}
         />
         <Input
           placeholder="Enter e-mail"
-          register={register("email", { required: "Email is required" })}
+          register={register('email', { required: 'Email is required' })}
           type="email"
           errors={errors.email}
         />
         <Input
           placeholder="Your status"
-          register={register("status", { required: "Status is required" })}
+          register={register('status', { required: 'Status is required' })}
           errors={errors.status}
         />
         <div>
           <Input
             image
-            register={register("image", { required: "Image is required" })}
+            register={register('image', { required: 'Image is required' })}
           />
         </div>
         <Button type="submit" className="w-full mt-8">

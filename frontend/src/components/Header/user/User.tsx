@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { UserIcon } from "@heroicons/react/24/outline";
-import Notifications from "./Notifications";
-import Invitations from "./Invitations";
-import Dropdown from "../../shared/dropDown";
-import { logOut } from "../../../redux/features/authSlice";
+import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { UserIcon } from '@heroicons/react/24/outline';
+import Notifications from './Notifications';
+import Invitations from './Invitations';
+import Dropdown from '../../shared/dropDown';
+import { logOut } from '../../../redux/features/authSlice';
 
 const Sign = () => {
   const { isAuth, username, token } = useAppSelector(
-    (state) => state.authReducer.value
+    (state) => state.authReducer.value,
   );
 
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const Sign = () => {
     <>
       {!isAuth ? (
         <div className="flex text-white gap-5">
-          <Link to={"/account/sign-up"}>Register</Link> |{" "}
+          <Link to={'/account/sign-up'}>Register</Link> |{' '}
           <Link to="/account/sign-in">Login</Link>
         </div>
       ) : (
@@ -37,6 +37,8 @@ const Sign = () => {
           </Dropdown>
         </div>
       )}
+
+      <div></div>
     </>
   );
 };
