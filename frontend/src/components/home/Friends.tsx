@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import useGetFriends from '../../hooks/useGetFriends/useGetFriends';
 import Card from './card/Card';
 import { IFriend } from '../../interfaces/IFriend';
