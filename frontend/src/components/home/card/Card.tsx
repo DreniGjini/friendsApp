@@ -35,7 +35,6 @@ const Card: React.FC<ICardProps> = ({
   };
 
   useEffect(() => {
-    console.log(returnData, 'retuurnData');
     closeModal();
   }, [returnData]);
 

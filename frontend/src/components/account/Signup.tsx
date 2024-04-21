@@ -17,7 +17,6 @@ const Signup = () => {
   } = useForm<FormInputs>();
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    console.log(data);
     localStorage.setItem('token', 'exampleToken');
   };
   return (
