@@ -19,6 +19,7 @@ const Card: React.FC<ICardProps> = ({
   name,
   imgUrl,
   statuses,
+  username,
   id,
   list = false,
 }) => {
@@ -52,11 +53,9 @@ const Card: React.FC<ICardProps> = ({
           />
           <div>
             <p className="font-semibold">{name}</p>
-            {statuses?.length && (
               <p className="font-light overflow-hidden max-h-12 break-words">
-                status
+                @{username}
               </p>
-            )}
           </div>
         </div>
       ) : (
@@ -91,7 +90,8 @@ const Card: React.FC<ICardProps> = ({
             <div className="w-full">
               <div>
                 <p className="font-semibold">{name}</p>
-                {statuses?.length && <p>status</p>}
+                <p >@{username}</p>
+                {statuses?.length && <p>{statuses[0].content}</p>}
               </div>
               <div className="flex flex-col md:flex-row items-start md:items-center gap-3 mt-5">
                 <Button dark className="flex items-center gap-2">

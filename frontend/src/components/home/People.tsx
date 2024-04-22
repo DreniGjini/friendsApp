@@ -5,6 +5,7 @@ import Card from './card/Card';
 const People = () => {
   const { usersData } = useGetUsers();
   const { id } = useAppSelector((state) => state.authReducer);
+  console.log(usersData, "daaaaaata")
 
   return (
     <div className="mt-14">
