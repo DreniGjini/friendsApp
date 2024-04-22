@@ -8,4 +8,6 @@ export class CreateFriendshipDTO {
   createdAt: Date;
   updatedAt: Date;
   notifyTo: string;
+  friendshipId?: string;
+  message: string;
 }

@@ -36,7 +36,7 @@ services:
       - ./schema-service/src:/usr/src/app/src
     command:  npm run start:dev
     environment:
-      - DATABASE_URL=postgresql://postgres:secret@postgres:5432/mg-db
+      - DATABASE_URL=postgresql://postgres:secret@postgres:5432/assignment-db
 
   status_service:
     build: ./status-service

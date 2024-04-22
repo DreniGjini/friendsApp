@@ -17,7 +17,7 @@ describe('NotificationsService', () => {
             return of({ notificationId: '123', ...data });
           case 'get_notifications':
             return of(['notification1', 'notification2']);
-          case 'update_friendship_notification':
+          case 'mark_notification_as_read':
             return of({ id: data, status: 'updated' });
           case 'update_status_notifications':
             return of({ ids: data.ids, status: 'status updated' });

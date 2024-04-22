@@ -64,6 +64,7 @@ export class FriendsService {
             'FRIEND_REQUEST_ACCEPTED',
           );
           this.logger.log(`Friend status updated: User ID ${data.userId}`);
+          return data;
         }),
         catchError((err) => {
           this.logger.error('Error in updating friend status', err);

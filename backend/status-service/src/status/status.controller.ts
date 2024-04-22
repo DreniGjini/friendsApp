@@ -23,19 +23,20 @@ export class StatusController {
     }
   }
 
-  @MessagePattern('update_status')
+  @MessagePattern({ cmd: 'update_status' })
   async update(@Payload() updateStatusDto: UpdateStatusDto) {
-    this.logger.log(`Received request to update status ${updateStatusDto.id}`);
+    this.logger.log(
+      `Received request to update status ${updateStatusDto.statusId}`,
+    );
     try {
-      const result = await this.statusService.update(
-        updateStatusDto.id,
-        updateStatusDto,
+      const result = await this.statusService.update(updateStatusDto);
+      this.logger.log(
+        `Status update successful for id ${updateStatusDto.statusId}`,
       );
-      this.logger.log(`Status update successful for id ${updateStatusDto.id}`);
       return result;
     } catch (error) {
       this.logger.error(
-        `Failed to update status ${updateStatusDto.id}`,
+        `Failed to update status ${updateStatusDto.statusId}`,
         error.stack,
       );
       throw new BadRequestException('Error updating status');

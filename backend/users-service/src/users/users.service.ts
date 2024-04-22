@@ -5,6 +5,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
+import { getUserDto } from './dto/getUsersDto';
 
 @Injectable()
 export class UsersService {
@@ -29,6 +30,41 @@ export class UsersService {
     } catch (error) {
       this.logger.error('Failed to create user', error.stack);
       throw new BadRequestException('Error creating user');
+    }
+  }
+
+  async getUsers(data: getUserDto) {
+    this.logger.log('Attempting to fetch users');
+    try {
+      const users = await this.prisma.user.findMany({
+        where: {
+          NOT: [
+            {
+              sentRequests: {
+                some: {
+                  addresseeId: data.userId,
+                },
+              },
+            },
+            {
+              receivedRequests: {
+                some: {
+                  requesterId: data.userId,
+                },
+              },
+            },
+          ],
+        },
+        include: {
+          sentRequests: true,
+          receivedRequests: true,
+        },
+      });
+      this.logger.log('Users fetched successfully');
+      return users;
+    } catch (error) {
+      this.logger.error('Failed to fetch users', error.stack);
+      throw new BadRequestException('Error fetching users');
     }
   }
 

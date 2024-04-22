@@ -42,16 +42,13 @@ export class NotificationsController {
     }
   }
 
-  @Patch(':id')
+  @Patch('mark-as-read/:id')
   async updateFriendshipNotification(@Param('id') id: string) {
-    this.notificationsService.updateFriendShipStatusNotification(id);
+    return await this.notificationsService.markNotificationAsRead(id);
   }
 
-  @Patch(':userId')
-  async updateUsersStatusNotifications(
-    @Param('userId') userId: string,
-    @Body() ids: string[],
-  ) {
-    this.notificationsService.updateUsersStatusNotifications(ids, userId);
+  @Patch('status/:userId')
+  async markNotificationAsRead(@Param('userId') userId: string) {
+    this.notificationsService.markNotificationAsRead(userId);
   }
 }

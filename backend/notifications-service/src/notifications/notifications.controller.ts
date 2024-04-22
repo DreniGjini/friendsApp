@@ -60,10 +60,10 @@ export class NotificationsController {
     }
   }
 
-  @MessagePattern({ cmd: 'update_friendship_notification' })
-  async updateFriendshipNotification(@Payload() id: string) {
+  @MessagePattern({ cmd: 'mark_notification_as_read' })
+  async markNotificationAsRead(@Payload() id: string) {
     try {
-      return await this.notificationsService.updateFriendshipNotification(id);
+      return await this.notificationsService.markNotificationAsRead(id);
     } catch (error) {
       this.logger.error('Error updating friendship notification', error);
       throw new BadRequestException(

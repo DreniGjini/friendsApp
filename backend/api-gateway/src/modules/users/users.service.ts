@@ -11,11 +11,27 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<any> {
     return this.cliProxy.send({ cmd: 'create_user' }, createUserDto).pipe(
+      map((data) => {
+        const payload = { username: data.username, userId: data.id };
+        return {
+          userData: data,
+          token: jwt.sign(payload, this.JWT_SECRET, { expiresIn: '10h' }),
+        };
+      }),
       catchError((err) => {
         console.error('Error creating user:', err);
         return throwError(
           () => new BadRequestException('Failed to create user'),
         );
+      }),
+    );
+  }
+
+  async getUsers(userId: string): Promise<any> {
+    return this.cliProxy.send({ cmd: 'get_users' }, userId).pipe(
+      catchError((err) => {
+        console.error('Error getting users:', err);
+        return throwError(() => new BadRequestException('Failed to get users'));
       }),
     );
   }

@@ -3,5 +3,5 @@ export class UpdateStatusDto {
 
   userId: string;
 
-  id: string;
+  statusId: string;
 }

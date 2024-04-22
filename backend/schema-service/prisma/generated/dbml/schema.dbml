@@ -4,11 +4,13 @@
 
 Table User {
   id String [pk]
+  name String [not null]
+  imgUrl String
   username String [unique, not null]
   email String [unique, not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
-  statuses StatusUpdate [not null]
+  status Status [not null]
   sentRequests Friend [not null]
   receivedRequests Friend [not null]
   notifications Notification [not null]
@@ -25,7 +27,7 @@ Table Friend {
   addressee User [not null]
 }
 
-Table StatusUpdate {
+Table Status {
   id String [pk]
   userId String [not null]
   content String [not null]
@@ -65,6 +67,6 @@ Ref: Friend.requesterId > User.id
 
 Ref: Friend.addresseeId > User.id
 
-Ref: StatusUpdate.userId > User.id
+Ref: Status.userId > User.id
 
 Ref: Notification.userId > User.id
