@@ -28,8 +28,9 @@ Follow these steps to get your project up and running.
 
 ### Frontend Setup
 
-1. Navigate to the frontend root folder. 
-2. 2. Start the server with:
+1. Navigate to the frontend root folder.
+2. Create an env file and add the following: `REACT_APP_BASE_URL=http://localhost:8080/`  or any other port you decide to run the api-gateway on.
+3. Start the server with:
 
 ## Support
 
