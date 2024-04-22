@@ -15,10 +15,10 @@ Follow these steps to get your project up and running.
 
 ### Backend Setup
 
-1. Navigate to the backend root folder. 
-2. Run the initialization script with Docker: `npm run project-init`
+1. Navigate to the backend root folder.
+2. Each Microservice has an `.env.example` file, create for each an `.env` and copy the content from the .env.example to the real `.env`
+3. Run the initialization script with Docker: `npm run project-init`
   This command starts the microservices in Docker containers. Ensure that port 8080  is available before proceeding.
-3. Each Microservice has an `.env.example` file, create for each an `.env` and copy the content from the .env.example to the real `.env`
   4. After the Docker containers are up, execute the following commands:
   
   - `npm run docker:migrate `
