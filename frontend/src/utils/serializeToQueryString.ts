@@ -8,5 +8,5 @@ export const serialize = (obj: objType): string => {
     .forEach((key) => {
       str.push(`${key}=${encodeURIComponent(obj[key])}`);
     });
-  return "?" + str.join("&");
+  return '?' + str.join('&');
 };

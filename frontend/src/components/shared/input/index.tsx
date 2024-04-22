@@ -1,5 +1,5 @@
-import React, { InputHTMLAttributes } from "react";
-import Styles from "./input.module.css";
+import React, { InputHTMLAttributes } from 'react';
+import Styles from './input.module.css';
 
 interface Input extends InputHTMLAttributes<HTMLInputElement> {
   errors?: Record<string, any>;

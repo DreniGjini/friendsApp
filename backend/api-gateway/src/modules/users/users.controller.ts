@@ -15,7 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('register')
   async createUser(@Body() createUserDto: CreateUserDto) {
     try {
       const user = await this.usersService.createUser(createUserDto);
@@ -46,7 +46,7 @@ export class UsersController {
     }
   }
 
-  @Get()
+  @Get('login')
   async login(@Query('emailOrUsername') data: string) {
     try {
       const user = await this.usersService.login(data);

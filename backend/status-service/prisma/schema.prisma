@@ -10,6 +10,8 @@ generator client {
 
 model User {
   id        String         @id @default(uuid())
+   name     String
+  imgUrl    String?
   username  String         @unique
   email     String         @unique
   createdAt DateTime       @default(now())
