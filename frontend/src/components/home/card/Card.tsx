@@ -8,7 +8,7 @@ import Modal from '../../shared/modal';
 import Button from '../../shared/button';
 import sendNotification from '../../../utils/sendNotification';
 import { IUser } from '../../../interfaces/IUser';
-import useSendFriendRequest from '../../../hooks/useSendFriendRequest/useRegister';
+import useSendFriendRequest from '../../../hooks/useSendFriendRequest/useSendFriendRequest';
 import { useAppSelector } from '../../../redux/hooks';
 
 interface ICardProps extends IUser {
