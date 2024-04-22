@@ -71,11 +71,9 @@ const Card: React.FC<ICardProps> = ({
           <img className="h-44 w-full object-cover" src={imgUrl} alt="" />
           <div className="px-5 py-3">
             <p className="font-semibold">{name}</p>
-            {statuses?.length && (
               <p className="font-light overflow-hidden max-h-16 break-words">
-                {statuses[0].content}
+                 @{username}
               </p>
-            )}
           </div>
         </div>
       )}
@@ -91,10 +89,10 @@ const Card: React.FC<ICardProps> = ({
               <div>
                 <p className="font-semibold">{name}</p>
                 <p >@{username}</p>
-                {statuses?.length && <p>{statuses[0].content}</p>}
+                {statuses?.length ? <p>{statuses[0].content }</p> : ""}
               </div>
               <div className="flex flex-col md:flex-row items-start md:items-center gap-3 mt-5">
-                <Button dark className="flex items-center gap-2">
+                {/* <Button dark className="flex items-center gap-2">
                   <FlagIcon className="w-5 h-5" />
                   <p>Report</p>
                 </Button>
@@ -105,7 +103,7 @@ const Card: React.FC<ICardProps> = ({
                 >
                   <NoSymbolIcon className="w-5 h-5" />
                   <p>Mute notifications</p>
-                </Button>
+                </Button> */}
                 <Button
                   onClick={() =>
                     sendFriendRequest({
