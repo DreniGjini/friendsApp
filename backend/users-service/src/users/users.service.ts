@@ -58,6 +58,7 @@ export class UsersService {
         include: {
           sentRequests: true,
           receivedRequests: true,
+          statuses: true,
         },
       });
       this.logger.log('Users fetched successfully');

@@ -107,17 +107,23 @@ export class FriendsService {
           if (friendship.requesterId !== userId) {
             result.requester = await this.prisma.user.findUnique({
               where: { id: friendship.requesterId },
+              include: {
+                statuses: true,
+              },
             });
           }
           if (friendship.addresseeId !== userId) {
             result.addressee = await this.prisma.user.findUnique({
               where: { id: friendship.addresseeId },
+              include: {
+                statuses: true,
+              },
             });
           }
           return result;
         }),
       );
-
+      console.log(detailedFriendships, 'fr');
       return detailedFriendships;
     } catch (error) {
       throw new BadRequestException(

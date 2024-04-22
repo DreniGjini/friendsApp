@@ -17,6 +17,16 @@ model User {
   updatedAt       DateTime    @updatedAt
   requesterFriends Friend[] @relation("Requester")
   addresseeFriends Friend[] @relation("Addressee")
+  statuses         Status[]  
+}
+
+model Status {
+  id        String      @id @default(uuid())
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Friend {
