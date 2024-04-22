@@ -8,7 +8,7 @@
     "project-init": "docker-compose up --build -d",
     "docker:migrate": "docker exec data-service npx prisma migrate dev --name init",
     "docker:generate": "docker exec backend-users_service-1 npx prisma generate && docker exec backend-notifications_service-1 npx prisma generate && docker exec backend-friends_service-1 npx prisma generate && docker exec backend-status_service-1 npx prisma generate",
-    "docker:seed": "docker exec data-service npx prisma migrate dev --name init"
+    "docker:seed": "docker exec data-service npx prisma db seed"
   },
   "author": "",
   "license": "ISC"

@@ -12,11 +12,11 @@ const Friends = () => {
   return (
     <div>
       <p className="text-white text-lg font-semibold mb-3">Friends</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 ">
+     { friendsData && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 ">
         {friendsData.map((el) => (
           <Card key={el.id} {...displayUser(el)} />
         ))}
-      </div>
+      </div>}
     </div>
   );
 };
