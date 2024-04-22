@@ -7,4 +7,7 @@ export interface IUserSchema {
   imgUrl: string;
 }
 
-export interface IFetchedUser extends IUser {}
+export interface IFetchedUser {
+  userData: IUser;
+  token: string;
+}

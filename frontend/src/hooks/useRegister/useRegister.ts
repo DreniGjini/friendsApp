@@ -5,12 +5,9 @@ import { HttpMethod } from '../../interfaces/enums/http';
 
 const useRegister = () => {
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState<IFetchedUser>({} as IFetchedUser);
+  const [data, setData] = useState<IFetchedUser>({} as IFetchedUser);
 
-  const fetchAPI = useBaseFetch<IUserSchema, IFetchedUser>(
-    setLoading,
-    setUserData,
-  );
+  const fetchAPI = useBaseFetch<IUserSchema, IFetchedUser>(setLoading, setData);
 
   const registerUser = useCallback(
     (userSchema: IUserSchema) => {
@@ -23,7 +20,7 @@ const useRegister = () => {
     [fetchAPI],
   );
 
-  return { loading, userData, registerUser };
+  return { loading, data, registerUser };
 };
 
 export default useRegister;
