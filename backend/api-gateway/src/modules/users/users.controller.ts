@@ -29,7 +29,24 @@ export class UsersController {
     }
   }
 
-  @Get(':id')
+  @Get('users/:userId')
+  async getUsers(@Param() userId: string) {
+    try {
+      const users = await this.usersService.getUsers(userId);
+      if (!users) {
+        throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+      }
+      return users;
+    } catch (error) {
+      console.error('Error getting users:', error);
+      throw new HttpException(
+        'Failed to get users',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('findById/:id')
   async getUserById(@Param('id') id: string) {
     try {
       const user = await this.usersService.getUserById(id);

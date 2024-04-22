@@ -2,6 +2,7 @@ import { Controller, Logger, BadRequestException } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { getUserDto } from './dto/getUsersDto';
 
 @Controller()
 export class UsersMicroserviceController {
@@ -19,6 +20,19 @@ export class UsersMicroserviceController {
     } catch (error) {
       this.logger.error('Failed to create user', error.stack);
       throw new BadRequestException('Error creating user');
+    }
+  }
+
+  @MessagePattern({ cmd: 'get_users' })
+  async getUsers(@Payload() data: getUserDto) {
+    this.logger.log('Received command to get users');
+    try {
+      const result = await this.usersService.getUsers(data);
+      this.logger.log('Users fetched successful');
+      return result;
+    } catch (error) {
+      this.logger.error('Failed to fetch users', error.stack);
+      throw new BadRequestException('Error fetching users');
     }
   }
 

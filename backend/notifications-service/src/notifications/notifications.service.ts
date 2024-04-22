@@ -37,7 +37,7 @@ export class NotificationsService {
     }
   }
 
-  async updateFriendshipNotification(id: string) {
+  async markNotificationAsRead(id: string) {
     try {
       const updatedNotification = await this.prisma.notification.update({
         where: { id },
@@ -51,17 +51,18 @@ export class NotificationsService {
 
   async friendRequestNotification(createFriendshipDTO: CreateFriendshipDTO) {
     try {
-      const notification = await this.prisma.notification.create({
+      await this.prisma.notification.create({
         data: {
-          message: `New friend request`,
+          message: createFriendshipDTO.message,
           status: NotificationStatus.UNREAD,
           type: NotificationType.FRIEND_REQUEST,
-          userId: createFriendshipDTO.addresseeId,
+          userId: createFriendshipDTO.notifyTo,
+          friendshipId: createFriendshipDTO.friendshipId,
         },
       });
       return {
         userId: createFriendshipDTO.notifyTo,
-        friendsId: notification.id,
+        friendshipId: createFriendshipDTO.friendshipId,
       };
     } catch (err) {
       throw new BadRequestException(

@@ -32,14 +32,16 @@ export class NotificationsService {
     );
   }
 
-  async updateFriendShipStatusNotification(id: string) {
-    return this.client.send({ cmd: 'update_friendship_notification' }, id).pipe(
+  async markNotificationAsRead(id: string) {
+    return this.client.send({ cmd: 'mark_notification_as_read' }, id).pipe(
       tap((data) => {
+        console.log(data, 'daaaaaaaaaaaaaata');
         this.eventsGateway.notifyUser(
           data,
           'friends',
           'NEW_FRIEND_REQUEST_UPDATE',
         );
+        return { message: 'success' };
       }),
       catchError(() => {
         return throwError(

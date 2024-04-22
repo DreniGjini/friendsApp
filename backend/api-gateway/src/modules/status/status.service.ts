@@ -16,6 +16,7 @@ export class StatusService {
     return this.client.send({ cmd: 'create_status' }, { userId, content }).pipe(
       tap((data) => {
         this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
+        return { message: 'success' };
       }),
       catchError((err) => {
         console.error('Error creating status:', err);
@@ -30,8 +31,9 @@ export class StatusService {
     return this.client
       .send({ cmd: 'update_status' }, { statusId, content, userId })
       .pipe(
-        tap((data) => {
+        tap((data: string[]) => {
           this.eventsGateway.notifyUsers(data, 'status', 'STATUS_CHANGE');
+          return { message: 'success' };
         }),
         catchError((err) => {
           console.error('Error updating status:', err);

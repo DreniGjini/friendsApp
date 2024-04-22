@@ -37,17 +37,16 @@ export class StatusService {
     }
   }
 
-  async update(id: string, { content }: UpdateStatusDto) {
-    this.logger.log(`Updating status ${id}`);
+  async update({ statusId, content }: UpdateStatusDto) {
+    this.logger.log(`Updating status ${statusId}`);
     try {
       const data = await this.prisma.status.update({
-        where: { id },
+        where: { id: statusId },
         data: { content },
       });
-      this.client.send({ cmd: 'status_update' }, data);
-      return data;
+      return this.client.send({ cmd: 'status_update' }, data);
     } catch (error) {
-      this.logger.error(`Failed to update status ${id}`, error.stack);
+      this.logger.error(`Failed to update status ${statusId}`, error.stack);
       if (error.code === 'P2025') {
         throw new BadRequestException('No such status exists to update');
       }

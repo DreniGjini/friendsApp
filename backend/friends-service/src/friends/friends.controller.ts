@@ -1,4 +1,3 @@
-// friends.controller.ts
 import { Controller, Logger } from '@nestjs/common';
 import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { FriendsService } from './friends.service';
@@ -16,7 +15,7 @@ export class FriendsController {
       return await this.friendsService.createFriendship(createFriendDto);
     } catch (error) {
       this.logger.error('Error creating friendship', error.stack);
-      throw error; // Re-throwing the error to be handled by the microservice transport layer
+      throw error;
     }
   }
 

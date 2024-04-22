@@ -11,6 +11,17 @@ import { CreateFriendDto } from './dto/create-friend.dto';
 import { FriendRequestStatus } from 'src/common/enums';
 import { Prisma } from '@prisma/client';
 
+export interface ExtendedFriendship {
+  id: string;
+  requesterId: string;
+  addresseeId: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  requester?: any;
+  addressee?: any;
+}
+
 @Injectable()
 export class FriendsService {
   constructor(
@@ -20,7 +31,6 @@ export class FriendsService {
 
   async createFriendship(createFriendDto: CreateFriendDto) {
     try {
-      console.log('reaching service friend microservice');
       const friendship = await this.prisma.friend.create({
         data: {
           status: FriendRequestStatus.PENDING,
@@ -32,7 +42,12 @@ export class FriendsService {
         throw new BadRequestException('Failed to create friendship');
       return this.client.send(
         { cmd: 'friend_request_pending_or_changed' },
-        { ...friendship, notifyTo: friendship.addresseeId },
+        {
+          ...friendship,
+          notifyTo: friendship.addresseeId,
+          friendshipId: friendship.id,
+          message: 'REQUEST',
+        },
       );
     } catch (error) {
       throw new BadRequestException(
@@ -54,7 +69,12 @@ export class FriendsService {
         throw new BadRequestException('Failed to update friendship');
       return this.client.send(
         { cmd: 'friend_request_pending_or_changed' },
-        { ...updatedFriendship, notifyTo: updatedFriendship.requesterId },
+        {
+          ...updatedFriendship,
+          notifyTo: updatedFriendship.requesterId,
+          firendshipId: updatedFriendship.id,
+          message: 'ACCEPTED',
+        },
       );
     } catch (error) {
       if (
@@ -69,15 +89,41 @@ export class FriendsService {
     }
   }
 
-  async getFriendshipsByUserId(userId: string) {
+  async getFriendshipsByUserId(userId: string): Promise<ExtendedFriendship[]> {
     try {
-      const friendships = await this.prisma.friend.findMany({
-        where: { OR: [{ requesterId: userId }, { addresseeId: userId }] },
-      });
-      if (!friendships) throw new NotFoundException('Friendships not found');
-      return friendships;
+      const friendships: ExtendedFriendship[] =
+        await this.prisma.friend.findMany({
+          where: {
+            OR: [
+              { requesterId: userId, status: FriendRequestStatus.ACCEPTED },
+              { addresseeId: userId, status: FriendRequestStatus.ACCEPTED },
+            ],
+          },
+        });
+
+      const detailedFriendships: ExtendedFriendship[] = await Promise.all(
+        friendships.map(async (friendship) => {
+          const result: ExtendedFriendship = { ...friendship };
+          if (friendship.requesterId !== userId) {
+            result.requester = await this.prisma.user.findUnique({
+              where: { id: friendship.requesterId },
+            });
+          }
+          if (friendship.addresseeId !== userId) {
+            result.addressee = await this.prisma.user.findUnique({
+              where: { id: friendship.addresseeId },
+            });
+          }
+          return result;
+        }),
+      );
+
+      return detailedFriendships;
     } catch (error) {
-      throw new BadRequestException('Error retrieving friendships');
+      throw new BadRequestException(
+        'Error retrieving friendships',
+        error.message,
+      );
     }
   }
 
