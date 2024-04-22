@@ -16,20 +16,20 @@ Follow these steps to get your project up and running.
 ### Backend Setup
 
 1. Navigate to the backend root folder. 
-2. Run the initialization script with Docker: npm run project-init
+2. Run the initialization script with Docker: `npm run project-init`
   This command starts the microservices in Docker containers. Ensure that port 8080  is available before proceeding.
-3. Each Microservice has an .env.example file, create for each a .env and copy the content from the .env.example to the real .env
+3. Each Microservice has an `.env.example` file, create for each an `.env` and copy the content from the .env.example to the real `.env`
   4. After the Docker containers are up, execute the following commands:
   
-  - npm run docker:migrate 
-  - npm run docker:generate 
-  - npm run docker:seed
+  - `npm run docker:migrate `
+  - `npm run docker:generate` 
+  - `npm run docker:seed`
     
 
 ### Frontend Setup
 
 1. Navigate to the frontend root folder.
-2. Create an env file and add the following: `REACT_APP_BASE_URL=http://localhost:8080/`  or any other port you decide to run the api-gateway on.
+2. Create an `.env` file and add the following: `REACT_APP_BASE_URL=http://localhost:8080/`  or any other port you decide to run the api-gateway on.
 3. Start the server with:
 
 ## Support
